@@ -1,8 +1,10 @@
 -- Clean up existing data
-TRUNCATE TABLE shift, calendar_activities, course_employee, course_activity, 
-course_instance_period, course_instance, course_layout, skills, 
+TRUNCATE TABLE 
+shift, calendar_activities, course_employee, course_activity, 
+course_instance_period, course_instance, course_layout, 
+skills, defined_skills, interests, defined_interests, 
 salary_history, job, department_manager, department, email, telephone, 
-interests, employee, activity_type CASCADE;
+employee, activity_type CASCADE;
 
 -- 1. ACTIVITY TYPES
 
@@ -48,7 +50,7 @@ INSERT INTO job (job_id, employee_id, job_title, department_id, salary, supervis
 (1, 1, 'Administrator', 1, 51532.00, NULL),
 (2, 2, 'Professor', 2, 42987.00, NULL),
 (3, 3, 'Lecturer', 3, 43922.00, 2),
-(4, 4, 'Teaching Assistant', 4, 37411.00, 2),
+(4, 4, 'Teaching Assistant', 4, 500.00, 2),
 (5, 5, 'Senior Lecturer', 5, 27355.00, 2),
 (6, 6, 'Administrator', 6, 50981.00, 1),
 (7, 7, 'Professor', 7, 42104.00, NULL),
@@ -91,17 +93,58 @@ INSERT INTO telephone (employee_id, phone_number, phone_type) VALUES
 (10, '070-0001122', 'Mobile');
 
 -- Skills
-INSERT INTO skills (employee_id, skill) VALUES
-(1, 'Teaching'), (1, 'Budgeting'),
-(2, 'Research'), (2, 'Python'),
-(3, 'C++'), (3, 'Teaching'),
-(4, 'Matlab'),
-(5, 'Architecture'),
-(6, 'Administration'),
-(7, 'SQL'), (7, 'Research'),
-(8, 'Chemistry'),
-(9, 'Mathematics'),
-(10, 'Physics');
+INSERT INTO defined_skills (defined_skill_id, skill) VALUES
+(1, 'Teaching'),
+(2, 'Budgeting'), 
+(3, 'Research'),
+(4, 'Python'), 
+(5, 'C++'), 
+(6, 'Matlab'),
+(7, 'Architecture'),
+(8, 'Administration'),
+(9, 'SQL'),
+(10, 'Chemistry'),
+(11, 'Mathematics'),
+(12, 'Physics');
+
+INSERT INTO skills (employee_id, defined_skill_id) VALUES
+(1, 1), (1, 2),
+(2, 3), (2, 4),
+(3, 5), (3, 1),
+(4, 6),
+(5, 7),
+(6, 8),
+(7, 9), (7, 3),
+(8, 10),
+(9, 11),
+(10, 12);
+
+-- Interests
+INSERT INTO defined_interests (defined_interest_id, interest) VALUES
+(1, 'Artificial Intelligence'),
+(2, 'Data Analysis'),
+(3, 'Machine Learning'),
+(4, 'Cybersecurity'),
+(5, 'Project Management'),
+(6, 'Software Engineering'),
+(7, 'Environmental Science'),
+(8, 'Electronics'),
+(9, 'Mechanical Design'),
+(10, 'Statistics'),
+(11, 'Biology'),
+(12, 'Networking & Systems');
+
+INSERT INTO interests (employee_id, defined_interest_id) VALUES
+(1, 1), (1, 2),
+(2, 3), (2, 4),
+(3, 5), (3, 6),
+(4, 2), (4, 10),
+(5, 7), (5, 11),
+(6, 5), (6, 12),
+(7, 8), (7, 9),
+(8, 10), (8, 4),
+(9, 1), (9, 3),
+(10, 6), (10, 12);
 
 -- 7. SALARY HISTORY
 
@@ -120,21 +163,27 @@ INSERT INTO salary_history (employee_id, salary, payment_date) VALUES
 -- 8. COURSEWARE
 
 -- Course Layouts
-INSERT INTO course_layout (course_layout_id, course_code, course_name, min_students, max_students) VALUES
-(1, 'IV1351', 'Data Storage Paradigms', 50, 150),
-(2, 'IX1500', 'Discrete Mathematics', 70, 125);
+INSERT INTO course_layout (course_layout_id, course_code, course_name, min_students, max_students, hp) VALUES
+(1, 'IV1351', 'Data Storage Paradigms', 50, 150, 7.5),
+(2, 'IX1500', 'Discrete Mathematics', 70, 125, 7.5),
+(3, 'IV1350', 'Object-oriented Design', 50, 150, 7.5),
+(4, 'DH2642', 'Interaction Programming and the Dynamic Web', 70, 150, 7.5);
 
 -- Course Instances
 INSERT INTO course_instance (course_instance_id, course_layout_id, amount_of_students, year) VALUES
 (1, 1, 120, 2025),
 (2, 1, 103, 2025),
-(3, 2, 118, 2025);
+(3, 2, 118, 2025),
+(4, 3, 125, 2025), 
+(5, 4, 120, 2025);
 
 -- Course Instance Periods
 INSERT INTO course_instance_period (course_instance_id, study_period, hp) VALUES
 (1, 'P1', 7.5),
 (2, 'P3', 7.5),
 (3, 'P1', 7.5);
+(4, 'P2', 7.5);
+(5, 'P4', 7.5);
 
 -- 9. COURSE ACTIVITIES
 
@@ -142,8 +191,14 @@ INSERT INTO course_activity (course_activity_id, course_instance_id, hp, activit
 (1, 1, 1.5, 'Lecture'),
 (2, 1, 3.0, 'Lab'),
 (3, 1, 3.0, 'Examination'),
-(4, 3, 2.0, 'Lecture'),
-(5, 3, 5.5, 'Seminar');
+(4, 3, 1.5, 'Lecture'),
+(5, 3, 6.0, 'Seminar'),
+(6, 4, 3.0, 'Seminar'),
+(7, 4, 4.5, 'Examination'),
+(8, 5, 2.0, 'Lecture'),
+(9, 5, 5.5, 'Lab'),
+(10, 2, 4.5, 'Lab'),
+(11, 2, 3.0, 'Examination');
 
 -- 10. COURSE EMPLOYEE
 
