@@ -21,14 +21,7 @@ INSERT INTO activity_type (activity_type, time_factor) VALUES
 INSERT INTO department (department_id, department_name) VALUES
 (1, 'Computer Science'),
 (2, 'Electrical Engineering'),
-(3, 'Human Centered Technology'),
-(4, 'Intelligent Systems'),
-(5, 'Architecture'),
-(6, 'Real Estate and Construction Management'),
-(7, 'Engineering Design'),
-(8, 'Materials Science and Engineering'),
-(9, 'Mathematics'),
-(10, 'Applied Physics');
+(3, 'Mathematics'),
 
 -- 3. EMPLOYEES
 
@@ -47,16 +40,18 @@ INSERT INTO employee (employee_id, person_number, first_name, last_name, street,
 -- 4. JOBS
 
 INSERT INTO job (job_id, employee_id, job_title, department_id, salary, supervisor_id) VALUES
-(1, 1, 'Administrator', 1, 51532.00, NULL),
-(2, 2, 'Professor', 2, 42987.00, NULL),
-(3, 3, 'Lecturer', 3, 43922.00, 2),
-(4, 4, 'Teaching Assistant', 4, 500.00, 2),
-(5, 5, 'Senior Lecturer', 5, 27355.00, 2),
-(6, 6, 'Administrator', 6, 50981.00, 1),
-(7, 7, 'Professor', 7, 42104.00, NULL),
-(8, 8, 'Lecturer', 8, 39788.00, 7),
-(9, 9, 'Teaching Assistant', 9, 38555.00, 7),
-(10, 10, 'Senior Lecturer', 10, 31544.00, 7);
+(1, 1, 'Administrator',      1, 51532.00, NULL),
+(2, 2, 'Professor',          1, 42987.00, 1),
+(3, 3, 'Lecturer',           1, 43922.00, 1),
+(4, 4, 'Teaching Assistant', 1, 500.00,   1),
+
+(7, 7, 'Professor',          2, 42104.00, NULL),
+(5, 5, 'Senior Lecturer',    2, 27355.00, 7),
+(6, 6, 'Administrator',      2, 50981.00, 7),
+
+(10, 10, 'Administrator',    3, 31544.00, NULL);
+(8, 8, 'Lecturer',           3, 39788.00, 10),
+(9, 9, 'Teaching Assistant', 3, 500.00,   10),
 
 -- 5. DEPARTMENT MANAGERS
 
@@ -149,7 +144,7 @@ INSERT INTO interests (employee_id, defined_interest_id) VALUES
 -- 7. SALARY HISTORY
 
 INSERT INTO salary_history (employee_id, salary, payment_date) VALUES
-(1, 50312.00, '2023-04-12'), (1, 51532.00, '2024-02-23'),
+(1, 50312.00, '2023-04-12'),
 (2, 42987.00, '2022-11-03'),
 (3, 43922.00, '2023-06-28'),
 (4, 37411.00, '2024-02-14'),
