@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict LBE6fdHrwBc8R1OHupYJDucwjIofejC1LQb8AwPAPUjl5dvJg5KSeh0ku7BJB9l
+\restrict HWpl6l61hzkjE40blpAKBJRDF1sKzxA9VXfCHA5eXkhbvhhVuR3tGy7jXigXHb7
 
 -- Dumped from database version 18.1
 -- Dumped by pg_dump version 18.1
@@ -296,6 +296,74 @@ ALTER SEQUENCE public.course_layout_course_layout_id_seq OWNED BY public.course_
 
 
 --
+-- Name: defined_interests; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.defined_interests (
+    defined_interest_id integer NOT NULL,
+    interest character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.defined_interests OWNER TO postgres;
+
+--
+-- Name: defined_interests_defined_interest_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.defined_interests_defined_interest_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.defined_interests_defined_interest_id_seq OWNER TO postgres;
+
+--
+-- Name: defined_interests_defined_interest_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.defined_interests_defined_interest_id_seq OWNED BY public.defined_interests.defined_interest_id;
+
+
+--
+-- Name: defined_skills; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.defined_skills (
+    defined_skill_id integer NOT NULL,
+    skill character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.defined_skills OWNER TO postgres;
+
+--
+-- Name: defined_skills_defined_skill_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.defined_skills_defined_skill_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.defined_skills_defined_skill_id_seq OWNER TO postgres;
+
+--
+-- Name: defined_skills_defined_skill_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.defined_skills_defined_skill_id_seq OWNED BY public.defined_skills.defined_skill_id;
+
+
+--
 -- Name: department; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -399,7 +467,7 @@ ALTER SEQUENCE public.employee_employee_id_seq OWNED BY public.employee.employee
 
 CREATE TABLE public.interests (
     employee_id integer NOT NULL,
-    interest character varying(100) NOT NULL
+    defined_interest_id integer NOT NULL
 );
 
 
@@ -474,7 +542,7 @@ ALTER TABLE public.shift OWNER TO postgres;
 
 CREATE TABLE public.skills (
     employee_id integer NOT NULL,
-    skill character varying(100) NOT NULL
+    defined_skill_id integer NOT NULL
 );
 
 
@@ -519,6 +587,20 @@ ALTER TABLE ONLY public.course_instance ALTER COLUMN course_instance_id SET DEFA
 --
 
 ALTER TABLE ONLY public.course_layout ALTER COLUMN course_layout_id SET DEFAULT nextval('public.course_layout_course_layout_id_seq'::regclass);
+
+
+--
+-- Name: defined_interests defined_interest_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.defined_interests ALTER COLUMN defined_interest_id SET DEFAULT nextval('public.defined_interests_defined_interest_id_seq'::regclass);
+
+
+--
+-- Name: defined_skills defined_skill_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.defined_skills ALTER COLUMN defined_skill_id SET DEFAULT nextval('public.defined_skills_defined_skill_id_seq'::regclass);
 
 
 --
@@ -607,6 +689,38 @@ ALTER TABLE ONLY public.course_layout
 
 
 --
+-- Name: defined_interests defined_interests_interest_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.defined_interests
+    ADD CONSTRAINT defined_interests_interest_key UNIQUE (interest);
+
+
+--
+-- Name: defined_interests defined_interests_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.defined_interests
+    ADD CONSTRAINT defined_interests_pkey PRIMARY KEY (defined_interest_id);
+
+
+--
+-- Name: defined_skills defined_skills_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.defined_skills
+    ADD CONSTRAINT defined_skills_pkey PRIMARY KEY (defined_skill_id);
+
+
+--
+-- Name: defined_skills defined_skills_skill_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.defined_skills
+    ADD CONSTRAINT defined_skills_skill_key UNIQUE (skill);
+
+
+--
 -- Name: department department_department_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -659,7 +773,7 @@ ALTER TABLE ONLY public.employee
 --
 
 ALTER TABLE ONLY public.interests
-    ADD CONSTRAINT interests_pkey PRIMARY KEY (employee_id, interest);
+    ADD CONSTRAINT interests_pkey PRIMARY KEY (employee_id, defined_interest_id);
 
 
 --
@@ -691,7 +805,7 @@ ALTER TABLE ONLY public.shift
 --
 
 ALTER TABLE ONLY public.skills
-    ADD CONSTRAINT skills_pkey PRIMARY KEY (employee_id, skill);
+    ADD CONSTRAINT skills_pkey PRIMARY KEY (employee_id, defined_skill_id);
 
 
 --
@@ -786,6 +900,22 @@ ALTER TABLE ONLY public.course_instance
 
 ALTER TABLE ONLY public.course_instance_period
     ADD CONSTRAINT fk_cip_ci FOREIGN KEY (course_instance_id) REFERENCES public.course_instance(course_instance_id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: interests fk_defined_interest; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.interests
+    ADD CONSTRAINT fk_defined_interest FOREIGN KEY (defined_interest_id) REFERENCES public.defined_interests(defined_interest_id) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: skills fk_defined_skill; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.skills
+    ADD CONSTRAINT fk_defined_skill FOREIGN KEY (defined_skill_id) REFERENCES public.defined_skills(defined_skill_id) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
 --
@@ -888,5 +1018,5 @@ ALTER TABLE ONLY public.telephone
 -- PostgreSQL database dump complete
 --
 
-\unrestrict LBE6fdHrwBc8R1OHupYJDucwjIofejC1LQb8AwPAPUjl5dvJg5KSeh0ku7BJB9l
+\unrestrict HWpl6l61hzkjE40blpAKBJRDF1sKzxA9VXfCHA5eXkhbvhhVuR3tGy7jXigXHb7
 
