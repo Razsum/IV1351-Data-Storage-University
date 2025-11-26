@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict iKDdTvQ6vLW64L9SMLERXn7ohracv475DxkrMQfQzEuLQhvPQfG3UdkTRS90t1s
+\restrict zsipgWgdpSsweQ0LZhB6PshR8ahySUAEHXrk8MA5gPhPtUOvynIeCk03tyNuKzb
 
 -- Dumped from database version 18.1
 -- Dumped by pg_dump version 18.1
@@ -172,7 +172,9 @@ CREATE TABLE public.calendar_activities (
     calendar_activities_id integer NOT NULL,
     course_activity_id integer NOT NULL,
     room character varying(50),
-    activity_time timestamp without time zone
+    activity_start timestamp without time zone NOT NULL,
+    activity_duration numeric(5,2) NOT NULL,
+    CONSTRAINT activity_duration_positive CHECK (((activity_duration IS NULL) OR (activity_duration >= (0)::numeric)))
 );
 
 
@@ -207,7 +209,6 @@ ALTER SEQUENCE public.calendar_activities_calendar_activities_id_seq OWNED BY pu
 CREATE TABLE public.course_activity (
     course_activity_id integer NOT NULL,
     course_instance_id integer NOT NULL,
-    hp numeric(4,2) DEFAULT 0,
     activity_type character varying(100) NOT NULL
 );
 
@@ -291,7 +292,7 @@ ALTER SEQUENCE public.course_instance_course_instance_id_seq OWNED BY public.cou
 CREATE TABLE public.course_instance_period (
     course_instance_id integer NOT NULL,
     study_period public.study_period NOT NULL,
-    hp numeric(4,2) NOT NULL
+    course_instance_period_hp numeric(4,2) CONSTRAINT course_instance_period_hp_not_null NOT NULL
 );
 
 
@@ -1065,5 +1066,5 @@ ALTER TABLE ONLY public.telephone
 -- PostgreSQL database dump complete
 --
 
-\unrestrict iKDdTvQ6vLW64L9SMLERXn7ohracv475DxkrMQfQzEuLQhvPQfG3UdkTRS90t1s
+\unrestrict zsipgWgdpSsweQ0LZhB6PshR8ahySUAEHXrk8MA5gPhPtUOvynIeCk03tyNuKzb
 
