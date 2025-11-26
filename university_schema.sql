@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict HWpl6l61hzkjE40blpAKBJRDF1sKzxA9VXfCHA5eXkhbvhhVuR3tGy7jXigXHb7
+\restrict iKDdTvQ6vLW64L9SMLERXn7ohracv475DxkrMQfQzEuLQhvPQfG3UdkTRS90t1s
 
 -- Dumped from database version 18.1
 -- Dumped by pg_dump version 18.1
@@ -108,6 +108,45 @@ $$;
 
 
 ALTER FUNCTION public.check_max_courses_per_employee() OWNER TO postgres;
+
+--
+-- Name: check_total_hp_for_course(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.check_total_hp_for_course() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+    total_hp numeric(6,2);
+    max_hp numeric(6,2);
+BEGIN
+    -- Get max HP from course_layout
+    SELECT cl.hp INTO max_hp
+    FROM course_instance ci
+    JOIN course_layout cl ON ci.course_layout_id = cl.course_layout_id
+    WHERE ci.course_instance_id = NEW.course_instance_id;
+
+    -- Calculate total HP for that course_instance
+    SELECT COALESCE(SUM(hp), 0) INTO total_hp
+    FROM course_instance_period
+    WHERE course_instance_id = NEW.course_instance_id
+      AND (study_period <> NEW.study_period OR TG_OP = 'INSERT');
+
+    -- Add NEW.hp to total
+    total_hp := total_hp + NEW.hp;
+
+    IF total_hp > max_hp THEN
+        RAISE EXCEPTION
+            'Total HP for course_instance % exceeds course layout HP (total %, max %)',
+            NEW.course_instance_id, total_hp, max_hp;
+    END IF;
+
+    RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION public.check_total_hp_for_course() OWNER TO postgres;
 
 SET default_tablespace = '';
 
@@ -267,7 +306,8 @@ CREATE TABLE public.course_layout (
     course_code character(6),
     course_name character varying(64) NOT NULL,
     min_students integer DEFAULT 0,
-    max_students integer
+    max_students integer,
+    hp numeric(4,2) NOT NULL
 );
 
 
@@ -847,6 +887,13 @@ CREATE TRIGGER shift_course_employee_check BEFORE INSERT OR UPDATE ON public.shi
 
 
 --
+-- Name: course_instance_period trg_check_hp_limit; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER trg_check_hp_limit BEFORE INSERT OR UPDATE ON public.course_instance_period FOR EACH ROW EXECUTE FUNCTION public.check_total_hp_for_course();
+
+
+--
 -- Name: course_activity fk_ca_ci; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1018,5 +1065,5 @@ ALTER TABLE ONLY public.telephone
 -- PostgreSQL database dump complete
 --
 
-\unrestrict HWpl6l61hzkjE40blpAKBJRDF1sKzxA9VXfCHA5eXkhbvhhVuR3tGy7jXigXHb7
+\unrestrict iKDdTvQ6vLW64L9SMLERXn7ohracv475DxkrMQfQzEuLQhvPQfG3UdkTRS90t1s
 
