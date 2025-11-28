@@ -1,11 +1,11 @@
 -- 0. CLEANUP (TRUNCATE TABLES)
 TRUNCATE TABLE 
-    "work_allocation", "planned_activity", "course_instance_period", 
-    "course_instance", "course_layout", "salary_history", 
-    "interests", "defined_interests", "skills", "defined_skills", 
-    "telephone", "email", "employee", "job_title", 
-    "department", "activity_type" 
-    CASCADE;
+    work_allocation, planned_activity, course_instance_period, 
+    course_instance, course_layout, salary_history, 
+    interests, defined_interests, skills, defined_skills, 
+    telephone, email, employee, job_title, 
+    department, activity_type 
+    RESTART IDENTITY CASCADE;
 
 -- 1. ACTIVITY TYPES
 INSERT INTO "activity_type" ("activity_name", "time_factor") VALUES 
@@ -24,7 +24,7 @@ INSERT INTO "department" ("department_id", "department_name") VALUES
 
 -- 3. JOB TITLES
 INSERT INTO "job_title" ("job_title_id", "job_title") VALUES
-(1, 'Administrator'),
+(1, 'PHD Student'),
 (2, 'Professor'),
 (3, 'Lecturer'),
 (4, 'Teaching Assistant'),

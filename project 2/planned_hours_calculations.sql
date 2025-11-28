@@ -1,27 +1,27 @@
 -- Calculate the total hours (with the multiplication factor) 
 -- along with the break-ups for each activity, for the current years’ 
--- course instances --
+-- course instances 
 
---We want to extract all planned hours calculations from the database --
+--We want to extract all planned hours calculations from the database 
 --To do this we need:
--- course layout for course code --
--- course instance for course instance id --
--- course layout for hp
--- course instance period for study period --
--- course instance for amount of students --
--- activity type for activity name --
--- We'll use activity name to total the amount of hours spent on each acitivty --
+-- course layout for course code 
+-- course instance for course instance id 
+-- course layout for hp 
+-- course instance period for study period 
+-- course instance for amount of students 
+-- activity type for activity name 
+-- We'll sum up total the amount of hours spent on each acitivty 
+-- Using the formula given we can calculate the total Admin and Exam hours 
+-- Summing it up together we can get a Total Hours spent
 
--- calculate total hours --
-
--- LOOKUP TABLE for calculating hours --
--- Activity Name    factor --
--- Lecture          3.6 --
--- Lab              2.4 --
--- Tutorial         2.4 --
--- Seminar          1.8 --
--- Other            1.0 --
--- Examination      1.5 --
+-- LOOKUP TABLE for calculating hours 
+-- Activity Name    factor 
+-- Lecture          3.6
+-- Lab              2.4
+-- Tutorial         2.4
+-- Seminar          1.8
+-- Other            1.0
+-- Examination      1.0
 
 DROP VIEW IF EXISTS planned_hours_calculations;
 
@@ -32,6 +32,7 @@ ci.course_instance_id AS "Course Instance ID",
 cl.hp AS "HP",
 cip.study_period AS "Period",
 ci.amount_of_students AS "# Students",
+
 SUM(CASE WHEN act.activity_name = 'Lecture'  THEN ROUND(pa.planned_hours * act.time_factor) ELSE 0 END) AS "Lecture Hours",
 SUM(CASE WHEN act.activity_name = 'Tutorial' THEN ROUND(pa.planned_hours * act.time_factor) ELSE 0 END) AS "Tutorial Hours",
 SUM(CASE WHEN act.activity_name = 'Lab'      THEN ROUND(pa.planned_hours * act.time_factor) ELSE 0 END) AS "Lab Hours",
