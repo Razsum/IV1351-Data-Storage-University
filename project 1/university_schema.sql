@@ -1,6 +1,6 @@
 --------------------------------------------------------------------------------------------------------
 -- TRIGGER FUNCTION: MAX 4 COURSES PER PERIOD
-CREATE OR REPLACE FUNCTION "check_max_course_allocation"()
+CREATE OR REPLACE FUNCTION "max_course_allocation"()
 RETURNS TRIGGER
 LANGUAGE plpgsql
 AS $$
@@ -29,7 +29,7 @@ BEGIN
           AND wa."course_instance_id" != NEW."course_instance_id"; 
 
         IF current_count >= max_limit THEN
-            RAISE EXCEPTION 'Allocation violation: Teacher % is already assigned to % courses in period % (Max allowed: %).', 
+            RAISE EXCEPTION 'Teacher % is already assigned to % courses in period % (Max allowed: %).', 
                 NEW."employee_id", current_count, rec_period."study_period", max_limit;
         END IF;
     END LOOP;
@@ -39,9 +39,9 @@ END;
 $$;
 
 -- TRIGGER CREATION
-CREATE TRIGGER "enforce_max_courses"
+CREATE TRIGGER "enforce_max_course_allocation"
 BEFORE INSERT OR UPDATE ON "work_allocation"
-FOR EACH ROW EXECUTE FUNCTION "check_max_course_allocation"();
+FOR EACH ROW EXECUTE FUNCTION "max_course_allocation"();
 --------------------------------------------------------------------------------------------------------
 
 --Create the custom type for study periods
