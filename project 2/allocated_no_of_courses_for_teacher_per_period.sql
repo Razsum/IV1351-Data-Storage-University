@@ -25,6 +25,8 @@ SELECT
 FROM employee e
 JOIN work_allocation wa ON e.employee_id = wa.employee_id
 JOIN course_instance_period cip ON wa.course_instance_id = cip.course_instance_id
+JOIN course_instance ci ON wa.course_instance_id = ci.course_instance_id
+WHERE ci.year = EXTRACT(YEAR FROM CURRENT_DATE)  -- current year dynamically
 
 GROUP BY 
     e.employee_id, 
@@ -34,5 +36,5 @@ GROUP BY
 SELECT *
 FROM allocated_no_of_courses_for_teacher_per_period
 WHERE "Period" = 'P1' --give a period (P1,P2,P3,P4)
-  AND number_of_courses >= 1 --give the minimum of courses allocated
+    AND number_of_courses >= 1 --give the minimum of courses allocated
 ORDER BY number_of_courses DESC;
