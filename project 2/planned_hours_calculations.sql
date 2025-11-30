@@ -48,11 +48,12 @@ ROUND(
         (32 + (0.725 * ci.amount_of_students))
     ) AS "Total Hours"
 
+
 FROM course_instance ci
-JOIN course_layout cl ON ci.course_layout_id = cl.course_layout_id
+jOIN course_layout cl ON ci.course_layout_id = cl.course_layout_id
 JOIN course_instance_period cip ON ci.course_instance_id = cip.course_instance_id
 LEFT JOIN planned_activity pa ON ci.course_instance_id = pa.course_instance_id
-LEFT JOIN activity_type act ON pa.activity_id = act.activity_id
+JOIN activity_type act ON act.activity_id = pa.activity_id
 
 GROUP BY 
     cl.course_code, 
@@ -64,4 +65,5 @@ ORDER BY
     cl.course_code, 
     cip.study_period;
 
+-- Call on the view
 SELECT*FROM planned_hours_calculations;

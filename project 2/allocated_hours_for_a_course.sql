@@ -76,6 +76,7 @@ ORDER BY
     cl.course_code,
     ci.course_instance_id;
 
+-- Call on the view
 -- Choose which course instance by changing the number
 SELECT * 
 FROM allocated_hours_for_a_course
