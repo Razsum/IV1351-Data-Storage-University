@@ -36,5 +36,5 @@ GROUP BY
 SELECT *
 FROM allocated_no_of_courses_for_teacher_per_period
 WHERE "Period" = 'P1' --give a period (P1,P2,P3,P4)
-    AND number_of_courses >= 1 --give the minimum of courses allocated
+    AND number_of_courses > 0 --Teachers allocated to more than N courses
 ORDER BY number_of_courses DESC;
