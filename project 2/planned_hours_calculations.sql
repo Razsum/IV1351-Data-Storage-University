@@ -52,7 +52,7 @@ ROUND(
 FROM course_instance ci
 jOIN course_layout cl ON ci.course_layout_id = cl.course_layout_id
 JOIN course_instance_period cip ON ci.course_instance_id = cip.course_instance_id
-LEFT JOIN planned_activity pa ON ci.course_instance_id = pa.course_instance_id
+JOIN planned_activity pa ON ci.course_instance_id = pa.course_instance_id
 JOIN activity_type act ON act.activity_id = pa.activity_id
 
 GROUP BY 
